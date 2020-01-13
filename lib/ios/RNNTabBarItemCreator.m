@@ -32,7 +32,7 @@
 	}
 	
 	
-	
+    tabItem.titlePositionAdjustment = UIOffsetMake(0.0, -10.0);
 	[self appendTitleAttributes:tabItem textColor:[bottomTabOptions.textColor getWithDefaultValue:nil] selectedTextColor:[bottomTabOptions.selectedTextColor getWithDefaultValue:nil] fontFamily:[bottomTabOptions.fontFamily getWithDefaultValue:nil] fontSize:[bottomTabOptions.fontSize getWithDefaultValue:nil] fontWeight:[bottomTabOptions.fontWeight getWithDefaultValue:nil]];
 	
 	return tabItem;
