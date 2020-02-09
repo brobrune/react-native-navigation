@@ -2,8 +2,6 @@
 #import "RNNBottomTabsController.h"
 #import "UITabBar+utils.h"
 
-#define TAB_BAR_HEIGHT 66;
-
 @implementation UITabBarController (RNNOptions)
 
 - (void)setCurrentTabIndex:(NSUInteger)currentTabIndex {
@@ -36,13 +34,6 @@
 
 - (void)setTabBarVisible:(BOOL)visible animated:(BOOL)animated {
     const CGRect tabBarFrame = self.tabBar.frame;
-    CGFloat height = TAB_BAR_HEIGHT;
-
-    if (@available(iOS 11.0, *)) {
-      UIWindow *window = UIApplication.sharedApplication.keyWindow;
-      CGFloat bottomPadding = window.safeAreaInsets.bottom;
-      height += bottomPadding;
-    }
 
     CALayer *topBorder = [CALayer layer];
     UIColor * borderColor = [UIColor colorWithRed:242.0f/255.0f green:242.0f/255.0f blue:242.0f/255.0f alpha:1.0f];
@@ -51,13 +42,13 @@
     [self.tabBar.layer addSublayer:topBorder];
 
 	const CGRect tabBarVisibleFrame = CGRectMake(tabBarFrame.origin.x,
-												 self.view.frame.size.height - height,
+												 self.view.frame.size.height - tabBarFrame.size.height,
 												 tabBarFrame.size.width,
-												 height);
+												 tabBarFrame.size.height);
 	const CGRect tabBarHiddenFrame = CGRectMake(tabBarFrame.origin.x,
 												self.view.frame.size.height,
 												tabBarFrame.size.width,
-												height);
+												tabBarFrame.size.height);
 	if (!animated) {
 		self.tabBar.hidden = !visible;
 		self.tabBar.frame = visible ? tabBarVisibleFrame : tabBarHiddenFrame;

@@ -3,11 +3,26 @@
 
 #define BADGE_OFFSET 0.2
 #define IMAGE_VIEW_TAG 1
+#define TAB_BAR_HEIGHT 66;
 
 typedef void (*UITabBarButton_layoutSubviews__IMP)(void);
 static UITabBarButton_layoutSubviews__IMP original_UITabBarButton_layoutSubviews;
 
 @implementation UITabBar (utils)
+
+- (CGSize)sizeThatFits:(CGSize)size {
+    CGSize sizeThatFits = [super sizeThatFits:size];
+    CGFloat height = TAB_BAR_HEIGHT;
+
+    if (@available(iOS 11.0, *)) {
+      UIWindow *window = UIApplication.sharedApplication.keyWindow;
+      CGFloat bottomPadding = window.safeAreaInsets.bottom;
+      height += bottomPadding;
+    }
+    
+    sizeThatFits.height = height;
+    return sizeThatFits;
+}
 
 - (void)centerTabItems {
 	[self removeTabBarItemTitles];
