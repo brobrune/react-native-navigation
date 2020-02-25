@@ -2,6 +2,8 @@
 #import "RNNBottomTabsController.h"
 #import "UITabBar+utils.h"
 
+#define TAB_BAR_HEIGHT 66;
+
 @implementation UITabBarController (RNNOptions)
 
 - (void)setCurrentTabIndex:(NSUInteger)currentTabIndex {
@@ -34,6 +36,13 @@
 
 - (void)setTabBarVisible:(BOOL)visible animated:(BOOL)animated {
     const CGRect tabBarFrame = self.tabBar.frame;
+    CGFloat height = TAB_BAR_HEIGHT;
+
+    if (@available(iOS 11.0, *)) {
+      UIWindow *window = UIApplication.sharedApplication.keyWindow;
+      CGFloat bottomPadding = window.safeAreaInsets.bottom;
+      height += bottomPadding;
+    }
 
     CALayer *topBorder = [CALayer layer];
     UIColor * borderColor = [UIColor colorWithRed:242.0f/255.0f green:242.0f/255.0f blue:242.0f/255.0f alpha:1.0f];
@@ -41,46 +50,47 @@
     topBorder.backgroundColor = [borderColor CGColor];
     [self.tabBar.layer addSublayer:topBorder];
 
-	const CGRect tabBarVisibleFrame = CGRectMake(tabBarFrame.origin.x,
-												 self.view.frame.size.height - tabBarFrame.size.height,
-												 tabBarFrame.size.width,
-												 tabBarFrame.size.height);
-	const CGRect tabBarHiddenFrame = CGRectMake(tabBarFrame.origin.x,
-												self.view.frame.size.height,
-												tabBarFrame.size.width,
-												tabBarFrame.size.height);
-	if (!animated) {
-		self.tabBar.hidden = !visible;
-		self.tabBar.frame = visible ? tabBarVisibleFrame : tabBarHiddenFrame;
-		return;
-	}
-	static const CGFloat animationDuration = 0.15;
+  const CGRect tabBarVisibleFrame = CGRectMake(tabBarFrame.origin.x,
+                         self.view.frame.size.height - height,
+                         tabBarFrame.size.width,
+                         height);
+  const CGRect tabBarHiddenFrame = CGRectMake(tabBarFrame.origin.x,
+                        self.view.frame.size.height,
+                        tabBarFrame.size.width,
+                        height);
+  if (!animated) {
+    self.tabBar.hidden = !visible;
+    self.tabBar.frame = visible ? tabBarVisibleFrame : tabBarHiddenFrame;
+    return;
+  }
+  static const CGFloat animationDuration = 0.15;
 
-	if (visible) {
-		self.tabBar.hidden = NO;
-		[UIView animateWithDuration: animationDuration
-							  delay: 0
-							options: UIViewAnimationOptionCurveEaseOut
-						 animations:^()
-		 {
-			 self.tabBar.frame = tabBarVisibleFrame;
-		 }
-						 completion:^(BOOL finished)
-		 {}];
-	} else {
-		[UIView animateWithDuration: animationDuration
-							  delay: 0
-							options: UIViewAnimationOptionCurveEaseIn
-						 animations:^()
-		 {
-			 self.tabBar.frame = tabBarHiddenFrame;
-		 }
-						 completion:^(BOOL finished)
-		 {
-			 self.tabBar.hidden = YES;
-		 }];
-	}
+  if (visible) {
+    self.tabBar.hidden = NO;
+    [UIView animateWithDuration: animationDuration
+                delay: 0
+              options: UIViewAnimationOptionCurveEaseOut
+             animations:^()
+     {
+       self.tabBar.frame = tabBarVisibleFrame;
+     }
+             completion:^(BOOL finished)
+     {}];
+  } else {
+    [UIView animateWithDuration: animationDuration
+                delay: 0
+              options: UIViewAnimationOptionCurveEaseIn
+             animations:^()
+     {
+       self.tabBar.frame = tabBarHiddenFrame;
+     }
+             completion:^(BOOL finished)
+     {
+       self.tabBar.hidden = YES;
+     }];
+  }
 }
+
 
 - (void)centerTabItems {
 	[self.tabBar centerTabItems];

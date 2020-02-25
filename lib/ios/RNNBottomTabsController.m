@@ -2,7 +2,7 @@
 #import "UITabBarController+RNNUtils.h"
 
 @implementation RNNBottomTabsController {
-	NSUInteger _currentTabIndex;
+  NSUInteger _currentTabIndex;
     BottomTabsBaseAttacher* _bottomTabsAttacher;
 }
 
@@ -20,7 +20,7 @@
 }
 
 - (id<UITabBarControllerDelegate>)delegate {
-	return self;
+  return self;
 }
 
 - (void)render {
@@ -29,17 +29,25 @@
 
 - (void)viewDidLayoutSubviews {
     [self.presenter viewDidLayoutSubviews];
-    
+    NSUInteger index = 0;
     for (UIView *view in [[self tabBar] subviews]) {
          UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self action: @selector(handleLongPress:)];
           if ([NSStringFromClass([view class]) isEqualToString:@"UITabBarButton"]) {
               [view addGestureRecognizer: longPressGesture];
           }
+        if (0 == index - 1) {
+            for (UIView *subview in view.subviews) {
+                if ([NSStringFromClass([subview class]) isEqualToString:@"UITabBarButtonLabel"]) {
+                    [self setSelectionIndicatorImage:subview];
+                }
+            }
+        }
+        index++;
     }
 }
 
 - (UIViewController *)getCurrentChild {
-	return self.selectedViewController;
+  return self.selectedViewController;
 }
 
 - (CGFloat)getBottomTabsHeight {
@@ -47,29 +55,61 @@
 }
 
 - (void)setSelectedIndexByComponentID:(NSString *)componentID {
-	for (id child in self.childViewControllers) {
-		UIViewController<RNNLayoutProtocol>* vc = child;
+  for (id child in self.childViewControllers) {
+    UIViewController<RNNLayoutProtocol>* vc = child;
 
-		if ([vc conformsToProtocol:@protocol(RNNLayoutProtocol)] && [vc.layoutInfo.componentId isEqualToString:componentID]) {
-			[self setSelectedIndex:[self.childViewControllers indexOfObject:child]];
-		}
-	}
+    if ([vc conformsToProtocol:@protocol(RNNLayoutProtocol)] && [vc.layoutInfo.componentId isEqualToString:componentID]) {
+      [self setSelectedIndex:[self.childViewControllers indexOfObject:child]];
+    }
+  }
+}
+
+- (void)setSelectionIndicatorImage:(UIView *)item {
+    CGFloat height = self.tabBar.frame.size.height;
+    if (@available(iOS 11.0, *)) {
+        UIWindow *window = UIApplication.sharedApplication.keyWindow;
+        CGFloat bottomPadding = window.safeAreaInsets.bottom;
+        if (bottomPadding > 0) {
+            height -= bottomPadding + 5;
+        }
+    }
+    
+    CGSize size = CGSizeMake(item.frame.size.width, height);
+    UIColor * color = [UIColor colorWithRed:0/255.0f green:199.0f/255.0f blue:80.0f/255.0f alpha:1.0f];
+    CGFloat lineWidth = 3.0;
+    UIGraphicsBeginImageContextWithOptions(size, false, 0);
+    [color setFill];
+    UIRectFill(CGRectMake(0, size.height - lineWidth, size.width, lineWidth));
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    self.tabBar.selectionIndicatorImage = img;
 }
 
 - (void)setSelectedIndex:(NSUInteger)selectedIndex {
-	_currentTabIndex = selectedIndex;
-	[super setSelectedIndex:selectedIndex];
+  _currentTabIndex = selectedIndex;
+  [super setSelectedIndex:selectedIndex];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-	return [[self presenter] getStatusBarStyle:self.resolveOptions];
+  return [[self presenter] getStatusBarStyle:self.resolveOptions];
 }
 
 #pragma mark UITabBarControllerDelegate
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-	[self.eventEmitter sendBottomTabSelected:@(tabBarController.selectedIndex) unselected:@(_currentTabIndex)];
-	_currentTabIndex = tabBarController.selectedIndex;
+  [self.eventEmitter sendBottomTabSelected:@(tabBarController.selectedIndex) unselected:@(_currentTabIndex)];
+  _currentTabIndex = tabBarController.selectedIndex;
+    NSUInteger index = 0;
+    for (UIView *view in [[self tabBar] subviews]) {
+        if (_currentTabIndex == index - 1) {
+            for (UIView *subview in view.subviews) {
+                if ([NSStringFromClass([subview class]) isEqualToString:@"UITabBarButtonLabel"]) {
+                    [self setSelectionIndicatorImage:subview];
+                }
+            }
+        }
+        index++;
+    }
 }
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *) recognizer {
