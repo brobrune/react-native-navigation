@@ -29,21 +29,21 @@
 
 - (void)viewDidLayoutSubviews {
     [self.presenter viewDidLayoutSubviews];
-    NSUInteger index = 0;
-    for (UIView *view in [[self tabBar] subviews]) {
-         UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self action: @selector(handleLongPress:)];
-          if ([NSStringFromClass([view class]) isEqualToString:@"UITabBarButton"]) {
-              [view addGestureRecognizer: longPressGesture];
-          }
-        if (0 == index - 1) {
-            for (UIView *subview in view.subviews) {
-                if ([NSStringFromClass([subview class]) isEqualToString:@"UITabBarButtonLabel"]) {
-                    [self setSelectionIndicatorImage:subview];
-                }
-            }
-        }
-        index++;
-    }
+    // NSUInteger index = 0;
+    // for (UIView *view in [[self tabBar] subviews]) {
+    //      UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self action: @selector(handleLongPress:)];
+    //       if ([NSStringFromClass([view class]) isEqualToString:@"UITabBarButton"]) {
+    //           [view addGestureRecognizer: longPressGesture];
+    //       }
+    //     if (0 == index - 1) {
+    //         for (UIView *subview in view.subviews) {
+    //             if ([NSStringFromClass([subview class]) isEqualToString:@"UITabBarButtonLabel"]) {
+    //                 [self setSelectionIndicatorImage:subview];
+    //             }
+    //         }
+    //     }
+    //     index++;
+    // }
 }
 
 - (UIViewController *)getCurrentChild {
@@ -99,17 +99,17 @@
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
   [self.eventEmitter sendBottomTabSelected:@(tabBarController.selectedIndex) unselected:@(_currentTabIndex)];
   _currentTabIndex = tabBarController.selectedIndex;
-    NSUInteger index = 0;
-    for (UIView *view in [[self tabBar] subviews]) {
-        if (_currentTabIndex == index - 1) {
-            for (UIView *subview in view.subviews) {
-                if ([NSStringFromClass([subview class]) isEqualToString:@"UITabBarButtonLabel"]) {
-                    [self setSelectionIndicatorImage:subview];
-                }
-            }
-        }
-        index++;
-    }
+    // NSUInteger index = 0;
+    // for (UIView *view in [[self tabBar] subviews]) {
+    //     if (_currentTabIndex == index - 1) {
+    //         for (UIView *subview in view.subviews) {
+    //             if ([NSStringFromClass([subview class]) isEqualToString:@"UITabBarButtonLabel"]) {
+    //                 [self setSelectionIndicatorImage:subview];
+    //             }
+    //         }
+    //     }
+    //     index++;
+    // }
 }
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *) recognizer {
