@@ -17,13 +17,14 @@
 	self.defaultOptions = defaultOptions;
 	self.layoutInfo = layoutInfo;
 	self.creator = creator;
-	self.eventEmitter = eventEmitter;
-	if ([self respondsToSelector:@selector(setViewControllers:)]) {
-		[self performSelector:@selector(setViewControllers:) withObject:childViewControllers];
-	}
-	self.presenter = presenter;
+    self.eventEmitter = eventEmitter;
+    self.presenter = presenter;
     [self.presenter bindViewController:self];
-	[self.presenter applyOptionsOnInit:self.resolveOptions];
+    self.extendedLayoutIncludesOpaqueBars = YES;
+    if ([self respondsToSelector:@selector(setViewControllers:)]) {
+        [self performSelector:@selector(setViewControllers:) withObject:childViewControllers];
+    }
+    [self.presenter applyOptionsOnInit:self.resolveOptions];
 
 	return self;
 }
@@ -31,12 +32,12 @@
 - (void)mergeOptions:(RNNNavigationOptions *)options {
     [self.options overrideOptions:options];
     [self.presenter mergeOptions:options resolvedOptions:self.resolveOptions];
-    [self.parentViewController mergeChildOptions:options];
+    [self.parentViewController mergeChildOptions:options child:self];
 }
 
-- (void)mergeChildOptions:(RNNNavigationOptions *)options {
+- (void)mergeChildOptions:(RNNNavigationOptions *)options child:(UIViewController *)child {
     [self.presenter mergeOptions:options resolvedOptions:self.resolveOptions];
-	[self.parentViewController mergeChildOptions:options];
+    [self.parentViewController mergeChildOptions:options child:child];
 }
 
 - (RNNNavigationOptions *)resolveOptions {
@@ -51,9 +52,12 @@
 	[self.options overrideOptions:options];
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-	UIInterfaceOrientationMask interfaceOrientationMask = self.presenter ? [self.presenter getOrientation:[self resolveOptions]] : [[UIApplication sharedApplication] supportedInterfaceOrientationsForWindow:[[UIApplication sharedApplication] keyWindow]];
-	return interfaceOrientationMask;
+- (UINavigationController *)stack {
+    if ([self isKindOfClass:UINavigationController.class]) {
+        return (UINavigationController *)self;
+    } else {
+        return self.navigationController;
+    }
 }
 
 - (void)render {
@@ -61,13 +65,13 @@
         [self readyForPresentation];
     }
     
-    [self.presentedComponentViewController setReactViewReadyCallback:^{
+    [self.getCurrentChild setReactViewReadyCallback:^{
         [self.presenter renderComponents:self.resolveOptionsWithDefault perform:^{
             [self readyForPresentation];
         }];
     }];
     
-    [self.presentedComponentViewController render];
+    [self.getCurrentChild render];
 }
 
 - (void)readyForPresentation {
@@ -101,6 +105,17 @@
         return self;
 }
 
+- (UIViewController *)findViewController:(UIViewController *)child {
+    if (self == child) return child;
+    
+    for (UIViewController* childController in self.childViewControllers) {
+        UIViewController* fromChild = [childController findViewController:child];
+        if (fromChild) return childController;
+    }
+    
+    return nil;
+}
+
 - (CGFloat)getTopBarHeight {
     for(UIViewController * child in [self childViewControllers]) {
         CGFloat childTopBarHeight = [child getTopBarHeight];
@@ -124,6 +139,10 @@
 	[self.parentViewController onChildWillAppear];
 }
 
+- (void)onChildAddToParent:(UIViewController *)child options:(RNNNavigationOptions *)options {
+    [self.parentViewController onChildAddToParent:child options:options];
+}
+
 - (void)componentDidAppear {
     [self.presenter componentDidAppear];
     [self.parentViewController componentDidAppear];
@@ -132,12 +151,6 @@
 - (void)componentDidDisappear {
     [self.presenter componentDidDisappear];
     [self.parentViewController componentDidDisappear];
-}
-
-- (void)willMoveToParentViewController:(UIViewController *)parent {
-	if (parent) {
-		[self.presenter applyOptionsOnWillMoveToParentViewController:self.resolveOptions];
-	}
 }
 
 #pragma mark getters and setters to associated object

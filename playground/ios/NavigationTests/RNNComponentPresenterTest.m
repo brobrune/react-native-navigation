@@ -5,7 +5,6 @@
 #import "RNNComponentViewController.h"
 #import "UIViewController+LayoutProtocol.h"
 #import "RNNTitleViewHelper.h"
-#import "RCTConvert+Modal.h"
 
 @interface RNNComponentPresenterTest : XCTestCase
 
@@ -21,7 +20,7 @@
 - (void)setUp {
     [super setUp];
 	self.componentRegistry = [OCMockObject partialMockForObject:[RNNReactComponentRegistry new]];
-	self.uut = [[RNNComponentPresenter alloc] initWithComponentRegistry:self.componentRegistry:[[RNNNavigationOptions alloc] initEmptyOptions]];
+	self.uut = [[RNNComponentPresenter alloc] initWithComponentRegistry:self.componentRegistry defaultOptions:[[RNNNavigationOptions alloc] initEmptyOptions]];
 	self.boundViewController = [OCMockObject partialMockForObject:[RNNComponentViewController new]];
 	[self.uut bindViewController:self.boundViewController];
 	self.options = [[RNNNavigationOptions alloc] initEmptyOptions];
@@ -76,32 +75,6 @@
 	RNNComponentPresenter* presenter = [[RNNComponentPresenter alloc] init];
 	[presenter bindViewController:self.boundViewController];
 	XCTAssertNotNil(presenter.navigationButtons);
-}
-
-- (void)testApplyOptionsOnInit_shouldSetModalPresentationStyleWithDefault {
-    [(UIViewController *) [(id) self.boundViewController expect] setModalPresentationStyle:[RCTConvert defaultModalPresentationStyle]];
-	[self.uut applyOptionsOnInit:self.options];
-	[(id)self.boundViewController verify];
-}
-
-- (void)testApplyOptionsOnInit_shouldSetModalTransitionStyleWithDefault {
-	[(UIViewController *) [(id) self.boundViewController expect] setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-	[self.uut applyOptionsOnInit:self.options];
-	[(id)self.boundViewController verify];
-}
-
-- (void)testApplyOptionsOnInit_shouldSetModalPresentationStyleWithValue {
-	self.options.modalPresentationStyle = [[Text alloc] initWithValue:@"overCurrentContext"];
-    [(UIViewController *) [(id) self.boundViewController expect] setModalPresentationStyle:UIModalPresentationOverCurrentContext];
-	[self.uut applyOptionsOnInit:self.options];
-	[(id)self.boundViewController verify];
-}
-
-- (void)testApplyOptionsOnInit_shouldSetModalTransitionStyleWithValue {
-	self.options.modalTransitionStyle = [[Text alloc] initWithValue:@"crossDissolve"];
-	[(UIViewController *) [(id) self.boundViewController expect] setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-	[self.uut applyOptionsOnInit:self.options];
-	[(id)self.boundViewController verify];
 }
 
 -(void)testApplyOptionsOnInit_TopBarDrawUnder_true {

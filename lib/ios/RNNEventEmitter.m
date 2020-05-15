@@ -21,12 +21,14 @@ static NSString* const SearchBarUpdated 		= @"RNN.SearchBarUpdated";
 static NSString* const SearchBarCancelPressed 	= @"RNN.SearchBarCancelPressed";
 static NSString* const PreviewCompleted         = @"RNN.PreviewCompleted";
 static NSString* const ScreenPopped             = @"RNN.ScreenPopped";
+static NSString* const BottomTabPressed         = @"RNN.BottomTabPressed";
 
 -(NSArray<NSString *> *)supportedEvents {
 	return @[AppLaunched,
 			 CommandCompleted,
 			 BottomTabSelected,
        BottomTabLongPressed,
+       BottomTabPressed,
 			 ComponentDidAppear,
 			 ComponentDidDisappear,
 			 NavigationButtonPressed,
@@ -84,6 +86,12 @@ static NSString* const ScreenPopped             = @"RNN.ScreenPopped";
                                         				  }];
 }
 
+-(void)sendBottomTabPressed:(NSNumber *)tabIndex {
+    [self send:BottomTabPressed body:@{
+                                        @"tabIndex": tabIndex
+                                        }];
+}
+
 -(void)sendOnNavigationCommandCompletion:(NSString *)commandName commandId:(NSString *)commandId params:(NSDictionary*)params {
 	[self send:CommandCompleted body:@{
 									   @"commandId":commandId,
@@ -116,9 +124,10 @@ static NSString* const ScreenPopped             = @"RNN.ScreenPopped";
     }];
 }
 
-- (void)sendModalsDismissedEvent:(NSString *)componentId numberOfModalsDismissed:(NSNumber *)modalsDismissed {
+- (void)sendModalsDismissedEvent:(NSString *)componentId componentName:(NSString *)componentName numberOfModalsDismissed:(NSNumber *)modalsDismissed {
     [self send:ModalDismissed body:@{
         @"componentId": componentId,
+        @"componentName": componentName,
         @"modalsDismissed": modalsDismissed
     }];
 }

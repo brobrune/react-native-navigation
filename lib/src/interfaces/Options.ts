@@ -3,15 +3,43 @@ import { ImageRequireSource, Insets } from 'react-native';
 
 type Color = string;
 type FontFamily = string;
-type FontWeight = 'regular' | 'bold' | 'thin' | 'ultraLight' | 'light' | 'medium' | 'semibold' | 'heavy' | 'black';
+type FontWeight =
+  | 'regular'
+  | 'bold'
+  | 'thin'
+  | 'ultraLight'
+  | 'light'
+  | 'medium'
+  | 'semibold'
+  | 'heavy'
+  | 'black';
 type LayoutOrientation = 'portrait' | 'landscape';
 type AndroidDensityNumber = number;
-type SystemItemIcon = 'done' | 'cancel' | 'edit'
-  | 'save' | 'add' | 'flexibleSpace' | 'fixedSpace'
-  | 'compose' | 'reply' | 'action' | 'organize'
-  | 'bookmarks' | 'search' | 'refresh' | 'stop'
-  | 'camera' | 'trash' | 'play' | 'pause'
-  | 'rewind' | 'fastForward' | 'undo' | 'redo';
+type SystemItemIcon =
+  | 'done'
+  | 'cancel'
+  | 'edit'
+  | 'save'
+  | 'add'
+  | 'flexibleSpace'
+  | 'fixedSpace'
+  | 'compose'
+  | 'reply'
+  | 'action'
+  | 'organize'
+  | 'bookmarks'
+  | 'search'
+  | 'refresh'
+  | 'stop'
+  | 'camera'
+  | 'trash'
+  | 'play'
+  | 'pause'
+  | 'rewind'
+  | 'fastForward'
+  | 'undo'
+  | 'redo';
+type Interpolation = 'linear' | 'accelerateDecelerate' | 'decelerate' | 'accelerate' | 'decelerateAccelerate';
 
 export interface OptionsSplitView {
   /**
@@ -91,7 +119,7 @@ export enum OptionsModalPresentationStyle {
   overFullScreen = 'overFullScreen',
   overCurrentContext = 'overCurrentContext',
   currentContext = 'currentContext',
-  popOver = 'popOver',
+  popover = 'popover',
   fullScreen = 'fullScreen',
   none = 'none'
 }
@@ -236,6 +264,18 @@ export interface OptionsTopBarBackButton {
    * Back button icon and text color
    */
   color?: Color;
+  /**
+   * Set subtitle font size
+   */
+  fontSize?: number;
+  /**
+   * Set subtitle font family
+   */
+  fontFamily?: FontFamily;
+  /**
+   * Set testID for reference in E2E tests
+   */
+  testID?: string;
 }
 
 export interface OptionsTopBarBackground {
@@ -280,18 +320,33 @@ export interface OptionsTopBarButton {
    */
   icon?: ImageRequireSource;
   /**
-  * Set the button icon insets
-  */
+   * Set the button icon insets
+   */
   iconInsets?: IconInsets;
   /**
    * Set the button as a custom component
    */
   component?: {
+    /**
+     * Component reference id, Auto generated if empty
+     */
+    id?: string;
+    /**
+     * Name of your component
+     */
     name: string;
     /**
      * Properties to pass down to the component
      */
     passProps?: object;
+    /**
+     * (Android only) component width
+     */
+    width?: number;
+    /**
+     * (Android only) component height
+     */
+    height?: number;
   };
   /**
    * (iOS only) Set the button as an iOS system icon
@@ -460,6 +515,40 @@ export interface OptionsTopBar {
   topMargin?: number;
 }
 
+export interface SharedElementTransition {
+  fromId: string;
+  toId: string;
+  duration?: number;
+  interpolation: Interpolation;
+}
+
+export interface ElementTransition {
+  id: string;
+  alpha?: AppearingElementAnimation | DisappearingElementAnimation;
+  translationX?: AppearingElementAnimation | DisappearingElementAnimation;
+  translationY?: AppearingElementAnimation | DisappearingElementAnimation;
+  scaleX?: AppearingElementAnimation | DisappearingElementAnimation;
+  scaleY?: AppearingElementAnimation | DisappearingElementAnimation;
+  rotationX?: AppearingElementAnimation | DisappearingElementAnimation;
+  rotationY?: AppearingElementAnimation | DisappearingElementAnimation;
+  x?: AppearingElementAnimation | DisappearingElementAnimation;
+  y?: AppearingElementAnimation | DisappearingElementAnimation;
+}
+
+export interface AppearingElementAnimation extends ElementAnimation {
+  from: number;
+}
+
+export interface DisappearingElementAnimation extends ElementAnimation {
+  to: number;
+}
+
+export interface ElementAnimation {
+  duration: number;
+  startDelay?: number;
+  interpolation: Interpolation;
+}
+
 export interface OptionsFab {
   id: string;
   backgroundColor?: Color;
@@ -536,7 +625,11 @@ export interface OptionsBottomTabs {
    * Control the text display mode below the tab icon
    * #### (Android specific)
    */
-  titleDisplayMode?: 'alwaysShow' | 'showWhenActive' | 'alwaysHide' | 'showWhenActiveForce';
+  titleDisplayMode?:
+    | 'alwaysShow'
+    | 'showWhenActive'
+    | 'alwaysHide'
+    | 'showWhenActiveForce';
   /**
    * Set the elevation of the Bottom Tabs in dp
    * #### (Android specific)
@@ -545,18 +638,18 @@ export interface OptionsBottomTabs {
 }
 
 export interface DotIndicatorOptions {
-    // default red
-    color?: Color;
-    // default 6
-    size?: number;
-    // default false
-    visible?: boolean;
+  // default red
+  color?: Color;
+  // default 6
+  size?: number;
+  // default false
+  visible?: boolean;
 }
 
 export type ImageResource = string;
 
 export interface OptionsBottomTab {
-    dotIndicator?: DotIndicatorOptions;
+  dotIndicator?: DotIndicatorOptions;
 
   /**
    * Set the text to display below the icon
@@ -576,7 +669,6 @@ export interface OptionsBottomTab {
   testID?: string;
   /**
    * Set the tab icon
-   * Note: On Android `icon` is required
    */
   icon?: ImageRequireSource | ImageResource;
   /**
@@ -599,7 +691,7 @@ export interface OptionsBottomTab {
    * Set the text font family
    */
   fontFamily?: FontFamily;
-    /**
+  /**
    * Set the font weight, ignore fontFamily and use the iOS system fonts instead
    * #### (iOS specific)
    */
@@ -633,6 +725,11 @@ export interface OptionsBottomTab {
    * #### (Android specific)
    */
   selectedFontSize?: number;
+  /**
+   * If it's set to false, pressing a tab won't select the tab
+   * instead it will emit a bottomTabPressedEvent
+   */
+  selectTabOnPress?: boolean;
 }
 
 export interface SideMenuSide {
@@ -774,13 +871,21 @@ export interface OptionsAnimationPropertyConfig {
  */
 export interface ScreenAnimationOptions {
   /**
-   * Animate the element over translateX
+   * Animate the element over x value
    */
   x?: OptionsAnimationPropertyConfig;
   /**
-   * Animate the element over translateY
+   * Animate the element over y value
    */
   y?: OptionsAnimationPropertyConfig;
+  /**
+   * Animate the element over translateX
+   */
+  translationX?: OptionsAnimationPropertyConfig;
+  /**
+   * Animate the element over translateY
+   */
+  translationY?: OptionsAnimationPropertyConfig;
   /**
    * Animate the element over opacity
    */
@@ -867,6 +972,14 @@ export interface StackAnimationOptions {
    * Configure animations for the content (Screen)
    */
   content?: ViewAnimationOptions;
+  /**
+   * Animations to be applied on elements which are shared between the appearing and disappearing screens
+   */
+  sharedElementTransitions?: SharedElementTransition[];
+  /**
+   * Animations to be applied on views in the appearing or disappearing screens
+   */
+  elementTransitions?: ElementTransition[];
 }
 
 /**
@@ -876,11 +989,11 @@ export interface AnimationOptions {
   /**
    * Configure the setStackRoot animation
    */
-  setStackRoot?: ScreenAnimationOptions;
+  setStackRoot?: ViewAnimationOptions;
   /**
    * Configure the setRoot animation
    */
-  setRoot?: ScreenAnimationOptions;
+  setRoot?: ViewAnimationOptions;
   /**
    * Configure what animates when a screen is pushed
    */
@@ -892,43 +1005,19 @@ export interface AnimationOptions {
   /**
    * Configure what animates when modal is shown
    */
-  showModal?: ScreenAnimationOptions;
+  showModal?: ViewAnimationOptions;
   /**
    * Configure what animates when modal is dismissed
    */
-  dismissModal?: ScreenAnimationOptions;
+  dismissModal?: ViewAnimationOptions;
 }
 
-export interface OptionsCustomTransition {
-  animations: OptionsCustomTransitionAnimation[];
-  duration?: number;
-}
-
-export interface OptionsCustomTransitionAnimation {
-  /**
-   * Animation type, only support sharedElement currently
-   */
-  type: 'sharedElement';
-  /**
-   * Transition from element Id
-   */
-  fromId: string;
-  /**
-   * Transition to element Id
-   */
-  toId: string;
-  /**
-   * Animation delay
-   */
-  startDelay?: number;
-  /**
-   * Animation spring Velocity
-   */
-  springVelocity?: number;
-  /**
-   * Animation duration
-   */
-  duration?: number;
+/**
+ * Configure Android's NavigationBar
+ */
+export interface NavigationBarOptions {
+  backgroundColor?: Color;
+  visible?: boolean;
 }
 
 export interface Options {
@@ -1008,25 +1097,10 @@ setRoot: {
   animations?: AnimationOptions;
 
   /**
-   * Custom Transition used for animate shared element between two screens
-   * Example:
-  ```js
-  Navigation.push(this.props.componentId, {
-    component: {
-      name: 'second.screen',
-      options: {
-        customTransition: {
-          animations: [
-            { type: 'sharedElement', fromId: 'image1', toId: 'image2', startDelay: 0, springVelocity: 0.2, duration: 0.5 }
-          ],
-          duration: 0.8
-        }
-      }
-    }
-  });
-  ```
-  */
-  customTransition?: OptionsCustomTransition;
+   * Configure Android's NavigationBar
+   */
+  navigationBar?: NavigationBarOptions;
+
   /**
    * Preview configuration for Peek and Pop
    * #### (iOS specific)
@@ -1054,8 +1128,4 @@ setRoot: {
    * @default false
    */
   blurOnUnmount?: boolean;
-  /**
-   * Props to pass to a component
-   */
-  passProps?: Record<string, any>;
 }

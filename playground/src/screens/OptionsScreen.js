@@ -1,5 +1,6 @@
 const React = require('react');
 const {Component} = require('react');
+import {Platform} from 'react-native';
 const Root = require('../components/Root');
 const Button = require('../components/Button')
 const Navigation = require('../services/Navigation');
@@ -13,7 +14,7 @@ const {
   HIDE_TOPBAR_DEFAULT_OPTIONS,
   SHOW_YELLOW_BOX_BTN,
   SET_REACT_TITLE_VIEW,
-  GOTO_BUTTONS_SCREEN
+  GOTO_BUTTONS_SCREEN,
 } = require('../testIDs');
 
 class Options extends Component {
@@ -29,6 +30,10 @@ class Options extends Component {
     };
   }
 
+  state = {
+    isAndroidNavigationBarVisible: true
+  };
+
   render() {
     return (
       <Root componentId={this.props.componentId}>
@@ -40,7 +45,8 @@ class Options extends Component {
         <Button label='Set React Title View' testID={SET_REACT_TITLE_VIEW} onPress={this.setReactTitleView} />
         <Button label='Show Yellow Box' testID={SHOW_YELLOW_BOX_BTN} onPress={() => console.warn('Yellow Box')} />
         <Button label='StatusBar' onPress={this.statusBarScreen} />
-        <Button label='Buttons Screen' testID={GOTO_BUTTONS_SCREEN} onPress={this.goToButtonsScreen} />
+        <Button label='Buttons Screen' testID={GOTO_BUTTONS_SCREEN} onPress={this.pushButtonsScreen} />
+        <Button label='Toggle Navigation bar visibility' platform='android' onPress={this.toggleAndroidNavigationBar}/>
       </Root>
     );
   }
@@ -65,7 +71,23 @@ class Options extends Component {
     }
   });
 
-  push = () => Navigation.push(this, Screens.Pushed);
+  toggleAndroidNavigationBar = () => {
+    this.setState({isAndroidNavigationBarVisible: !this.state.isAndroidNavigationBarVisible});
+    Navigation.mergeOptions(this, {
+      navigationBar: {
+        visible: !this.state.isAndroidNavigationBarVisible
+      }
+    })
+  };
+
+  push = () => Navigation.push(this, {
+    component: {
+      name: Screens.Pushed,
+      passProps: {
+        previousScreenIds: [this.props.componentId]
+      }
+    }
+  });
 
   hideTopBarInDefaultOptions = () => {
     Navigation.setDefaultOptions({
@@ -94,7 +116,13 @@ class Options extends Component {
 
   statusBarScreen = () => Navigation.showModal(Screens.StatusBar);
 
-  goToButtonsScreen = () => Navigation.push(this, Screens.Buttons);
+  pushButtonsScreen = () => Navigation.push(this, Screens.Buttons, {
+    animations: {
+      push: {
+        waitForRender: true
+      }
+    }
+  });
 }
 
 module.exports = Options;

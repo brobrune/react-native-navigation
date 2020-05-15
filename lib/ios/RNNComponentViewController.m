@@ -1,6 +1,4 @@
 #import "RNNComponentViewController.h"
-#import "RNNAnimationsTransitionDelegate.h"
-#import "UIViewController+LayoutProtocol.h"
 
 @implementation RNNComponentViewController
 
@@ -8,9 +6,10 @@
 
 - (instancetype)initWithLayoutInfo:(RNNLayoutInfo *)layoutInfo rootViewCreator:(id<RNNComponentViewCreator>)creator eventEmitter:(RNNEventEmitter *)eventEmitter presenter:(RNNComponentPresenter *)presenter options:(RNNNavigationOptions *)options defaultOptions:(RNNNavigationOptions *)defaultOptions {
 	self = [super initWithLayoutInfo:layoutInfo creator:creator options:options defaultOptions:defaultOptions presenter:presenter eventEmitter:eventEmitter childViewControllers:nil];
-	
-	self.animator = [[RNNAnimator alloc] initWithTransitionOptions:self.resolveOptions.customTransition];
-	
+    if (@available(iOS 13.0, *)) {
+        self.navigationItem.standardAppearance = [UINavigationBarAppearance new];
+        self.navigationItem.scrollEdgeAppearance = [UINavigationBarAppearance new];
+    }
 	return self;
 }
 
@@ -79,42 +78,6 @@
 	[self.eventEmitter sendOnSearchBarCancelPressed:self.layoutInfo.componentId];
 }
 
--(BOOL)isCustomTransitioned {
-	return self.resolveOptions.customTransition.animations != nil;
-}
-
-- (BOOL)prefersStatusBarHidden {
-	return [_presenter isStatusBarVisibility:self.navigationController resolvedOptions:self.resolveOptions];
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle {
-	return [_presenter getStatusBarStyle:[self resolveOptions]];
-}
-
-- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated{
-	RNNComponentViewController* vc =  (RNNComponentViewController*)viewController;
-	if (![[vc.self.resolveOptions.topBar.backButton.transition getWithDefaultValue:@""] isEqualToString:@"custom"]){
-		navigationController.delegate = nil;
-	}
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
-								  animationControllerForOperation:(UINavigationControllerOperation)operation
-											   fromViewController:(UIViewController*)fromVC
-												 toViewController:(UIViewController*)toVC {
-	if (self.animator) {
-		return self.animator;
-	} else if (operation == UINavigationControllerOperationPush && self.resolveOptions.animations.push.hasCustomAnimation) {
-		return [[RNNAnimationsTransitionDelegate alloc] initWithScreenTransition:self.resolveOptions.animations.push isDismiss:NO];
-	} else if (operation == UINavigationControllerOperationPop && self.resolveOptions.animations.pop.hasCustomAnimation) {
-		return [[RNNAnimationsTransitionDelegate alloc] initWithScreenTransition:self.resolveOptions.animations.pop isDismiss:YES];
-	} else {
-		return nil;
-	}
-	
-	return nil;
-}
-
 - (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location{
 	return self.previewController;
 }
@@ -167,5 +130,26 @@
 	[self.eventEmitter sendOnNavigationButtonPressed:self.layoutInfo.componentId buttonId:barButtonItem.buttonId];
 }
 
+# pragma mark - UIViewController overrides
+
+- (void)willMoveToParentViewController:(UIViewController *)parent {
+    [self.presenter willMoveToParentViewController:parent];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return [self.presenter getStatusBarStyle];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return [self.presenter getStatusBarVisibility];
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return [self.presenter getOrientation];
+}
+
+- (BOOL)hidesBottomBarWhenPushed {
+    return [self.presenter hidesBottomBarWhenPushed];
+}
 
 @end

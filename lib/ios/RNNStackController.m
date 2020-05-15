@@ -1,13 +1,20 @@
 #import "RNNStackController.h"
 #import "RNNComponentViewController.h"
+#import "UIViewController+Utils.h"
+#import "StackControllerDelegate.h"
 
 @implementation RNNStackController {
     UIViewController* _presentedViewController;
+    StackControllerDelegate* _stackDelegate;
 }
 
-- (instancetype)init {
-    self = [super init];
-    self.delegate = self;
+- (instancetype)initWithLayoutInfo:(RNNLayoutInfo *)layoutInfo creator:(id<RNNComponentViewCreator>)creator options:(RNNNavigationOptions *)options defaultOptions:(RNNNavigationOptions *)defaultOptions presenter:(RNNBasePresenter *)presenter eventEmitter:(RNNEventEmitter *)eventEmitter childViewControllers:(NSArray *)childViewControllers {
+    self = [super initWithLayoutInfo:layoutInfo creator:creator options:options defaultOptions:defaultOptions presenter:presenter eventEmitter:eventEmitter childViewControllers:childViewControllers];
+    _stackDelegate = [[StackControllerDelegate alloc] initWithEventEmitter:self.eventEmitter];
+    self.delegate = _stackDelegate;
+    if (@available(iOS 11.0, *)) {
+        self.navigationBar.prefersLargeTitles = YES;
+    }
     return self;
 }
 
@@ -21,33 +28,16 @@
 	[self.presenter applyOptionsOnViewDidLayoutSubviews:self.resolveOptions];
 }
 
-- (UINavigationController *)navigationController {
-	return self;
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle {
-	return [_presenter getStatusBarStyle:self.resolveOptions];
-}
-
-- (UIModalPresentationStyle)modalPresentationStyle {
-	return self.getCurrentChild.modalPresentationStyle;
+- (void)mergeChildOptions:(RNNNavigationOptions *)options child:(UIViewController *)child {
+    if (child.isLastInStack) {
+        [self.presenter mergeOptions:options resolvedOptions:self.resolveOptions];
+    }
+    [self.parentViewController mergeChildOptions:options child:child];
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated {
     [self prepareForPop];
 	return [super popViewControllerAnimated:animated];
-}
-
-- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    if ([self.viewControllers indexOfObject:_presentedViewController] < 0) {
-        [self sendScreenPoppedEvent:_presentedViewController];
-    }
-    
-    _presentedViewController = viewController;
-}
-
-- (void)sendScreenPoppedEvent:(UIViewController *)poppedScreen {
-    [self.eventEmitter sendScreenPoppedEvent:poppedScreen.layoutInfo.componentId];
 }
 
 - (void)prepareForPop {
@@ -62,6 +52,28 @@
 
 - (UIViewController *)childViewControllerForStatusBarStyle {
 	return self.topViewController;
+}
+
+# pragma mark - UIViewController overrides
+
+- (void)willMoveToParentViewController:(UIViewController *)parent {
+    [self.presenter willMoveToParentViewController:parent];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return [self.presenter getStatusBarStyle];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return [self.presenter getStatusBarVisibility];
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return [self.presenter getOrientation];
+}
+
+- (BOOL)hidesBottomBarWhenPushed {
+    return [self.presenter hidesBottomBarWhenPushed];
 }
 
 @end

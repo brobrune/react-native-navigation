@@ -1,5 +1,4 @@
 const React = require('react');
-const { Platform } = require('react-native');
 const Root = require('../components/Root');
 const Button = require('../components/Button');
 const Screens = require('./Screens');
@@ -42,7 +41,7 @@ class StackScreen extends React.Component {
         <Button label='Push Custom Back Button' testID={PUSH_CUSTOM_BACK_BTN} onPress={this.pushCustomBackButton} />
         <Button label='Set Stack Root' testID={SET_STACK_ROOT_BTN} onPress={this.setStackRoot} />
         <Button label='Set Stack Root With ID' testID={SET_STACK_ROOT_WITH_ID_BTN} onPress={this.setStackRootWithId} />
-        {Platform.OS === 'ios' && <Button label='Search' testID={SEARCH_BTN} onPress={this.search} />}
+        <Button label='Search' testID={SEARCH_BTN} onPress={this.search} platform='ios'/>
       </Root>
     );
   }
@@ -72,10 +71,10 @@ class StackScreen extends React.Component {
 
   search = () => Navigation.push(this, Screens.Search);
 
-  setStackRoot = () => Navigation.setStackRoot(this, stack([
+  setStackRoot = () => Navigation.setStackRoot(this, [
     component(Screens.Pushed, { topBar: { title: { text: 'Screen A' } } }),
     component(Screens.Pushed, { topBar: { title: { text: 'Screen B' } } }),
-  ]));
+  ]);
 
   setStackRootWithId = () => Navigation.setStackRoot(this,
     {

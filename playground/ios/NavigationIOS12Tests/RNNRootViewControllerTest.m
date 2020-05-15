@@ -8,6 +8,7 @@
 #import "RNNStackController.h"
 #import "RNNBottomTabsController.h"
 #import "RNNUIBarButtonItem.h"
+#import "RNNBottomTabsController+Helpers.h"
 
 
 @interface RNNComponentViewController (EmbedInTabBar)
@@ -49,7 +50,7 @@
 	layoutInfo.componentId = self.componentId;
 	layoutInfo.name = self.pageName;
 	
-	id presenter = [OCMockObject partialMockForObject:[[RNNComponentPresenter alloc] init]];
+	id presenter = [OCMockObject partialMockForObject:[[RNNComponentPresenter alloc] initWithComponentRegistry:nil defaultOptions:nil]];
 	self.uut = [[RNNComponentViewController alloc] initWithLayoutInfo:layoutInfo rootViewCreator:self.creator eventEmitter:self.emitter presenter:presenter options:self.options defaultOptions:nil];
 }
 
@@ -132,7 +133,7 @@
 
 -(void)testbackgroundColor_validColor{
 	UIColor* inputColor = [RCTConvert UIColor:@(0xFFFF0000)];
-	self.options.layout.backgroundColor = [[Color alloc] initWithValue:inputColor];
+	self.options.layout.componentBackgroundColor = [[Color alloc] initWithValue:inputColor];
 	[self.uut viewWillAppear:false];
 	UIColor* expectedColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
 	XCTAssertTrue([self.uut.view.backgroundColor isEqual:expectedColor]);
@@ -166,13 +167,12 @@
 -(void)testTabBadge {
 	NSString* tabBadgeInput = @"5";
 	self.options.bottomTab.badge = [[Text alloc] initWithValue:tabBadgeInput];
-	__unused RNNBottomTabsController* vc = [[RNNBottomTabsController alloc] init];
 	NSMutableArray* controllers = [NSMutableArray new];
 	UITabBarItem* item = [[UITabBarItem alloc] initWithTitle:@"A Tab" image:nil tag:1];
 	[self.uut setTabBarItem:item];
 	[controllers addObject:self.uut];
-	[vc setViewControllers:controllers];
-	[self.uut viewWillAppear:false];
+	__unused RNNBottomTabsController* vc = [RNNBottomTabsController createWithChildren:controllers];
+	[self.uut willMoveToParentViewController:vc];
 	XCTAssertTrue([self.uut.tabBarItem.badgeValue isEqualToString:tabBadgeInput]);
 
 }

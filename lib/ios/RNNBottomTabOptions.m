@@ -27,8 +27,30 @@
     self.textColor = [ColorParser parse:dict key:@"textColor"];
     self.fontSize = [NumberParser parse:dict key:@"fontSize"];
     self.visible = [BoolParser parse:dict key:@"visible"];
+    self.selectTabOnPress = [BoolParser parse:dict key:@"selectTabOnPress"];
 
     return self;
+}
+
+- (BOOL)hasValue {
+    return
+    self.text.hasValue ||
+    self.badge.hasValue ||
+    self.badgeColor.hasValue ||
+    self.fontFamily.hasValue ||
+    self.fontWeight.hasValue ||
+    self.fontSize.hasValue ||
+    self.testID.hasValue ||
+    self.icon.hasValue ||
+    self.selectedIcon.hasValue ||
+    self.iconColor.hasValue ||
+    self.selectedIconColor.hasValue ||
+    self.selectedTextColor.hasValue ||
+    self.iconInsets.hasValue ||
+    self.textColor.hasValue ||
+    self.visible.hasValue ||
+    self.selectTabOnPress.hasValue;
+    
 }
 
 @end

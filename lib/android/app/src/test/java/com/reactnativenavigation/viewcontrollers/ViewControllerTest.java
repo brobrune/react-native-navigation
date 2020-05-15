@@ -1,7 +1,6 @@
 package com.reactnativenavigation.viewcontrollers;
 
 import android.app.Activity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -17,6 +16,7 @@ import com.reactnativenavigation.parse.params.NullBool;
 import com.reactnativenavigation.utils.CommandListenerAdapter;
 import com.reactnativenavigation.utils.Functions;
 import com.reactnativenavigation.viewcontrollers.stack.StackController;
+import com.reactnativenavigation.viewcontrollers.viewcontrolleroverlay.ViewControllerOverlay;
 import com.reactnativenavigation.views.Component;
 
 import org.assertj.android.api.Assertions;
@@ -25,6 +25,8 @@ import org.mockito.Mockito;
 import org.robolectric.Shadows;
 
 import java.lang.reflect.Field;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -63,8 +65,8 @@ public class ViewControllerTest extends BaseTest {
     @Test
     public void canOverrideViewCreation() {
         final FrameLayout otherView = new FrameLayout(activity);
-        yellowBoxDelegate = spy(new YellowBoxDelegate());
-        ViewController myController = new ViewController(activity, "vc", yellowBoxDelegate, new Options()) {
+        yellowBoxDelegate = spy(new YellowBoxDelegate(activity));
+        ViewController myController = new ViewController(activity, "vc", yellowBoxDelegate, new Options(), new ViewControllerOverlay(activity)) {
             @Override
             protected FrameLayout createView() {
                 return otherView;
@@ -74,6 +76,9 @@ public class ViewControllerTest extends BaseTest {
             public void sendOnNavigationButtonPressed(String buttonId) {
 
             }
+
+            @Override
+            public String getCurrentComponentName() { return null; }
         };
         assertThat(myController.getView()).isEqualTo(otherView);
     }
@@ -135,7 +140,7 @@ public class ViewControllerTest extends BaseTest {
     public void onChildViewAdded_delegatesToYellowBoxDelegate() {
         View child = new View(activity);
         ViewGroup view = new FrameLayout(activity);
-        ViewController vc = new ViewController(activity, "", yellowBoxDelegate, new Options()) {
+        ViewController vc = new ViewController(activity, "", yellowBoxDelegate, new Options(), new ViewControllerOverlay(activity)) {
             @Override
             protected ViewGroup createView() {
                 return view;
@@ -145,6 +150,9 @@ public class ViewControllerTest extends BaseTest {
             public void sendOnNavigationButtonPressed(String buttonId) {
 
             }
+
+            @Override
+            public String getCurrentComponentName() { return null; }
         };
         vc.onChildViewAdded(view, child);
         verify(yellowBoxDelegate).onChildViewAdded(view, child);
@@ -174,6 +182,12 @@ public class ViewControllerTest extends BaseTest {
         spy.getView().getViewTreeObserver().dispatchOnGlobalLayout();
 
         verify(spy, times(1)).onViewAppeared();
+    }
+
+    @Test
+    public void isViewShown_doesNotCreateView() {
+        assertThat(uut.isViewShown()).isFalse();
+        assertThat(uut.view).isNull();
     }
 
     @Test

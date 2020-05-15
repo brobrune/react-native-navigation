@@ -1,4 +1,374 @@
 # Changelog
+# 6.5.0
+## Added
+### Android
+* Added `width` and `height` options to button component which can be used to set exact measurements to button components [#42a6917](https://github.com/wix/react-native-navigation/commit/42a6917eeee149f7348a4eaf524ba76bac1240cf) by [guyca](https://github.com/guyca)
+* Reuse button component if a component with the same id already exists  [#42a6917](https://github.com/wix/react-native-navigation/commit/42a6917eeee149f7348a4eaf524ba76bac1240cf) by [guyca](https://github.com/guyca)
+* Allow hiding the NavigationBar [#7f6353b](https://github.com/wix/react-native-navigation/commit/7f6353bcead9c6d6e87d72574e0fec29ad9f2d19) by [M-i-k-e-l](https://github.com/M-i-k-e-l)
+* Support `rotation` animation in shared element transition [#03dd211](https://github.com/wix/react-native-navigation/commit/03dd211a5425cf14586ef49814c1d3716aeb8441) by [guyca](https://github.com/guyca)
+* Implement shared element transition `interpolation` option [#e80eb92](https://github.com/wix/react-native-navigation/commit/e80eb9275a04921976127f8c2775f37088f133c1) by [guyca](https://github.com/guyca)
+* Implement shared element transition `startDelay` option [#334ab71](https://github.com/wix/react-native-navigation/commit/334ab7174a599f18af66eca6cee7409bee7537e7) by [guyca](https://github.com/guyca)
+
+### iOS
+* Implement rotate animation for shared element transition [#5d9e910](https://github.com/wix/react-native-navigation/commit/5d9e9100b771ca76ac20b916f945406460084b9b) by [yogevbd](https://github.com/yogevbd)
+
+## Fixed
+### iOS
+* Fixed invalid modalPresentationStyle.popover enum value [#951a07b](https://github.com/wix/react-native-navigation/commit/951a07bb5571dbda2a0c9b665969bc25fc5ae784) by [rfnd](https://github.com/rfnd)
+* Fix incorrect layout after changing BottomTabs visibility [#21cafcd](https://github.com/wix/react-native-navigation/commit/21cafcdecca8264dd2157d172dab24d8d4b5b4e6) by [yogevbd](https://github.com/yogevbd)
+* Fix SafeAreaView measurement in SideMenu [#0da097e](https://github.com/wix/react-native-navigation/commit/0da097ef8471670e6550152fa5ebbdf4a02b3478) by [rfnd](https://github.com/rfnd)
+* Fix backButton.color change on mergeOptions [#da0fd19](https://github.com/wix/react-native-navigation/commit/da0fd194f88b8f1042a0fe74bbf91e75ffac95b3) by [yogevbd](https://github.com/yogevbd)
+* Fix bottomTab colors in landscape orientation  [#89402dc](https://github.com/wix/react-native-navigation/commit/89402dc31a3769b4fb1326b95170961497011caf) by [yogevbd](https://github.com/yogevbd)
+* FIx screenPopped event not emitted if screen is popped with pop command [#2f31a2f](https://github.com/wix/react-native-navigation/commit/2f31a2fa703659f153162274c846a8f137ee94d1) by [yogevbd](https://github.com/yogevbd)
+
+### Android
+* Set textual TopBar button style options by spans instead of applying them on the view [#42a6917](https://github.com/wix/react-native-navigation/commit/42a6917eeee149f7348a4eaf524ba76bac1240cf) by [guyca](https://github.com/guyca)
+* Ensure Component layout is not created prematurely by mergeOptions [#111df5a](https://github.com/wix/react-native-navigation/commit/111df5a3ba51ba6762cffd7119071bb4f71d18f7) by [guyca](https://github.com/guyca)
+* Resolve tabsAttachMode from default options [#a4b2c76](https://github.com/wix/react-native-navigation/commit/a4b2c76a9d9b934192a4deee496c3ecef4c184ff) by [guyca](https://github.com/guyca)
+* Support declaring currentTabIndex and currentTabId in default options [#3e5be29](https://github.com/wix/react-native-navigation/commit/3e5be29af8b1b78be1eec9ebf970b9204354a052) by [guyca](https://github.com/guyca)
+* Fix BottomTabs size not adjusted after orientation change [#aa7908c](https://github.com/wix/react-native-navigation/commit/aa7908c57d141c7bb49de64a8e071330a8f7af31) by [guyca](https://github.com/guyca)
+
+
+# 6.4.0
+## Fixed
+### iOS
+* Fix styling options on iOS 13.4 [#950ac64](https://github.com/wix/react-native-navigation/commit/950ac6404fe1a43021426803d4fdad4ed4711476) by [yogevbd](https://github.com/yogevbd)
+* Fix white flicker when pushing a screen [#a2bdfac](https://github.com/wix/react-native-navigation/commit/a2bdfacb27065f2101c3228df98484ba4ec68e03) by [RobertPaul01](https://github.com/RobertPaul01)
+* Fix white topBar on pop with swipe gesture [#6227321](https://github.com/wix/react-native-navigation/commit/62273214f0590007ce81be2aef6da1f05e035c4a) by [yogevbd](https://github.com/yogevbd)
+### Android
+* Fix title component not being replaced via mergeOptions [#b0e8a82](https://github.com/wix/react-native-navigation/commit/b0e8a824f5e1ec141c9d3030dc21f242902ec29f) by [guyca](https://github.com/guyca)
+
+# 6.3.3
+## Fixed
+### iOS
+* Fix status bar visibility on iOS 13 [#f487134](https://github.com/wix/react-native-navigation/commit/f487134d8e4c302f69453c093c49fde17dba46fe) by [yogevbd](https://github.com/yogevbd)
+
+# 6.3.1 - 6.3.2
+## Added
+* Custom component reference id OptionsTopBarButton typing [#6046372](https://github.com/wix/react-native-navigation/commit/60463729e5e4ace5c4c81ddc854ee2421b431c86) by [jarnove](https://github.com/jarnove)
+
+## Fixed
+### Android
+* Always resolve dismissAllModals promise [#ec03383](https://github.com/wix/react-native-navigation/commit/ec03383b0de4fe092ddbef807850d131a42a1e7f) [#52bcd5b](https://github.com/wix/react-native-navigation/commit/52bcd5ba5090622db37055d0a18cb673673affa0) by [guyca](https://github.com/guyca)
+
+# 6.3.0
+## Fixed
+### iOS
+* Fix symbol collision with react-native-keyboard-input [#8ad40e1](https://github.com/wix/react-native-navigation/commit/8ad40e1ab23116d432e888801c07b57c6c09ad37) by [yogevbd](https://github.com/yogevbd)
+* Fix overlays touch interception on new iPads [#2ed434c](https://github.com/wix/react-native-navigation/commit/2ed434c952b7c9326d9547005caa8c0601e58cb4)
+* Removes unable to find UIManager module warning [#ba12604](https://github.com/wix/react-native-navigation/commit/ba1260402cc15409ddfef46fd5cad180d5e1a60f)
+* Reject pop command when viewController not found in the hierarchy [#4413aa4](https://github.com/wix/react-native-navigation/commit/4413aa4a76628449116cf9bc7294696a490d6a65)
+* Fix mergeOptions merging options with wrong child [#3c38c50](https://github.com/wix/react-native-navigation/commit/3c38c50a8b53e958a21e6fb7453622463e9870ff)
+* Fix build warnings and possible retain cycles issues [#3f8577d](https://github.com/wix/react-native-navigation/commit/3f8577da7d23a2e4698d27d12bf9de55be39e7ef)
+* Fix bottomTab icon hidden after setting badge [#124f975](https://github.com/wix/react-native-navigation/commit/124f975f42ebaf124d9e7c58296eaafd0f617ad9) by [yogevbd](https://github.com/yogevbd)
+
+
+# 6.2.0
+## Added
+* Add windows support to build scripts vai `npm run start-windows` command [#afb5bff](https://github.com/wix/react-native-navigation/commit/afb5bffb49b9e8c670419aaacedf10f65cf82fd2) by [mayconmesquita](https://github.com/mayconmesquita)
+
+## Fixed
+### iOS
+* Fix largeTitle background color on iOS 13 no being applied [#979cb6e](https://github.com/wix/react-native-navigation/commit/979cb6e08f80bd0b6b8e9286eb21d3c255c88312) by [yogevbd](https://github.com/yogevbd)
+* Fix bottomTabs attach mode not working when BottomTabs are inside SideMenu [#7d6029f](https://github.com/wix/react-native-navigation/commit/7d6029f06bd3b4f4336d0d50a1621a5291e43fa7) by [yogevbd](https://github.com/yogevbd)
+* Fix crash on iOS 10 when displaying stack layouts [#e923b8c](https://github.com/wix/react-native-navigation/commit/e923b8c02204e31d1ce6781dab11ebeabc2af218) [RomualdPercereau](https://github.com/RomualdPercereau)
+
+# 6.1.2
+## Fixed
+### iOS
+* Fix modal presentation style not being applied on some layouts [#931167e](https://github.com/wix/react-native-navigation/commit/931167e039000502d4198244c450dacce3c39809) by [yogevbd](https://github.com/yogevbd)
+* Fix truncated bottomTab.text with semibold fontWeight [#b01629c](https://github.com/wix/react-native-navigation/commit/b01629c41da9197ee0737c937c02684c73dd9042) by [yogevbd](https://github.com/yogevbd)
+* Always drawBehind bottomTabs and topBar when translucent: true [#6edbbf5](https://github.com/wix/react-native-navigation/commit/6edbbf512f2230ee0bceaf73c7895bca90475700) by [yogevbd](https://github.com/yogevbd)
+* drawBehind when largeTitle is visible - fixes black large title [#6edbbf5](https://github.com/wix/react-native-navigation/commit/6edbbf512f2230ee0bceaf73c7895bca90475700) by [yogevbd](https://github.com/yogevbd)
+
+# 6.1.1
+## Fixed
+### iOS
+* Create new UITabBarItem instance on each bottomTab update [#3757ff7](https://github.com/wix/react-native-navigation/commit/3757ff7aa64cc9b6b8054af3e27b3865e27b2f9f) by [yogevbd](https://github.com/yogevbd)
+* Delete duplicate misplaced files in root directory [#6d61ec0](https://github.com/wix/react-native-navigation/commit/6d61ec0e6cabeddc41b5860b4cb5b24f3de92dc2) by [ItsNoHax](https://github.com/ItsNoHax)
+
+# 6.1.0
+## Added
+* Add componentName to modalDismiss event [#1c2558d](https://github.com/wix/react-native-navigation/commit/1c2558d77e489e2a35adc3a60eebed97ebf52add) by [jinshin1013](https://github.com/jinshin1013)
+
+## Fixed
+### iOS
+* Support changing backButton fontFamily and fontSize [#b438588](https://github.com/wix/react-native-navigation/commit/b4385883de9ff07ed8915cdcd6f78ddc26bb6691) by [yogevbd](https://github.com/yogevbd)
+* Fixed bottomTab text color not working correctly on iOS13 [#211a46e](https://github.com/wix/react-native-navigation/commit/211a46e087213bc72c166a4332cd1d3d0fa01be2) by [yogevbd](https://github.com/yogevbd)
+* Support backButton.testID [#e1b76c1](https://github.com/wix/react-native-navigation/commit/e1b76c1fe222a4153eddedf43caba5dd457aadb9) by [yogevbd](https://github.com/yogevbd)
+* Handle statusBar.visible in all layout types and not only in components [#a2f5dbd](https://github.com/wix/react-native-navigation/commit/a2f5dbd3131f2cc158a650a01a1b9e271c2952f2) by [yogevbd](https://github.com/yogevbd)
+* Fix a lot of large title issues [#54b2855](https://github.com/wix/react-native-navigation/commit/54b285531ea43e0dae76ae08af7de923ccf5917c)
+* Fix title and subtitle color animations when popping screens [#5210848](https://github.com/wix/react-native-navigation/commit/52108484cc59ad8aaec9ef51b3c370c7ac80128f) by [yogevbd](https://github.com/yogevbd)
+
+### Android
+* Stop rejecting dismissAllModals promise if no modals are displayed [#30b0b47](https://github.com/wix/react-native-navigation/commit/30b0b47b712cd1882b9c944a125c9d06ca5e0dd8) by [guyca](https://github.com/guyca)
+* Support tabs without icons on Android [#ef58a6c](https://github.com/wix/react-native-navigation/commit/ef58a6cdeb1c4ea90ff528af50d6d2dc572f9f28) by [guyca](https://github.com/guyca)
+* Fix autolink script - set minSdk to 19 [#4ce0e89](https://github.com/wix/react-native-navigation/commit/4ce0e89b06b9ab29d4be5d2eb0d11419deaade7a) by [jinshin1013](https://github.com/jinshin1013)
+* ExternalComponentController extends ViewController [#c33ff12](https://github.com/wix/react-native-navigation/commit/c33ff1291ded4b171ef7b3f0736c5bc5b169d850) by [guyca](https://github.com/guyca)
+* Support [react-native-youtube](https://github.com/davidohayon669/react-native-youtube) [#2793a02](https://github.com/wix/react-native-navigation/commit/2793a022729043d271fa6ffd80df62297c5f76fa)
+
+# 6.0.1
+## Fixed
+### iOS
+* Fix applying drawBehind through mergeOptions [#e002a68](https://github.com/wix/react-native-navigation/commit/e002a68110cb75877982aed9c693ece8382c7942) by [yogevbd](https://github.com/yogevbd)
+
+# 6.0.0
+This release changes how layout.backgroundColor work on iOS to add parity with Android.
+* layout.backgroundColor - applies background color to parent layouts (Stack, BottomTabs, SideMenu etc)
+* layout.componentBackgroundColor - applies background color only to components
+
+## Fixed
+### Android
+* Fix custom push animations not working [#c9232cb](https://github.com/wix/react-native-navigation/commit/c9232cb9e49e02cd1975d16de01fa2a6186032b0) by [guyca](https://github.com/guyca)
+### iOS
+* Remove draw behind deprecation [#950642d](https://github.com/wix/react-native-navigation/commit/950642d48b2ec67f510ae6b3eefaaeb1ebfcf43d) by [yogevbd](https://github.com/yogevbd)
+* Fix layout.backgroundColor being applied to components, it's now applied to parent layouts  [#950642d](https://github.com/wix/react-native-navigation/commit/950642d48b2ec67f510ae6b3eefaaeb1ebfcf43d) by [yogevbd](https://github.com/yogevbd)
+* Implement layout.componentBackgroundColor which is applied only to component ViewControllers [#950642d](https://github.com/wix/react-native-navigation/commit/950642d48b2ec67f510ae6b3eefaaeb1ebfcf43d) by [yogevbd](https://github.com/yogevbd)
+
+# 5.1.1
+## Fixed
+### iOS
+* Apply extendedLayoutIncludesOpaqueBars true on all viewControllers (this commit was originally added to v4 and was left out of v5 my mistake) [#9fefeca](https://github.com/wix/react-native-navigation/commit/9fefeca9be9844fc80f839a532c97f5c4fa1d299)
+### Android
+* Fix crash when mergeOptions were called before stack view was created [#defc2aa](https://github.com/wix/react-native-navigation/commit/defc2aaa6e7c845c05cabe8c5753cc6a68ab5830) by [guyca](https://github.com/guyca)
+
+# 5.1.0
+## Added
+### iOS
+* Add window.backgroundColor option [#c99ecf9](https://github.com/wix/react-native-navigation/commit/c99ecf9b145f453a9674c965d1634bcdece973b6) by [yogevbd](https://github.com/yogevbd)
+
+# 5.0.0
+This release is focuses on shared element transition and on improving the installation process of the library.
+
+## Upgrading from V4
+### Remove missingDimensionStrategy from app/build.gradle
+Since RNN supports multiple react-native versions, the library has multiple flavors, each targeting a different RN version. We now chose the appropriate flavor based on the react-native version installed in node_modules.
+```diff
+-missingDimensionStrategy "RNN.reactNativeVersion", "reactNativeXX" // Where XX is the minor number of the react-native version you're using
+```
+
+### Declare Kotlin version in build.gradle
+We're starting to migrate RNN to Kotlin. All new code is written in Kotlin and existing code will be gradually converted to Kotlin. This requires you to declare the Kotlin version you're using in your project.
+```diff
+buildscript {
+    ext {
++        kotlinVersion = "1.3.61" // Or any other kotlin version following 1.3.x
++        RNNKotlinVersion = kotlinVersion
++        RNNKotlinStdlib = "kotlin-stdlib-jdk8"
+    }
+    dependencies {
++        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"    
+    }
+}
+```
+
+### Update MainApplication.java
+In an effort to simplify RNN's integrations process as much as possible, we're minimizing the changes required to both MainApplication and MainActivity.
+```diff
++import com.facebook.react.PackageList;
+
+public class MainApplication extends NavigationApplication {
+-    @Override
+-    protected ReactNativeHost createReactNativeHost() {
+-    return new NavigationReactNativeHost(this) {  
++    private final ReactNativeHost mReactNativeHost =
+            new NavigationReactNativeHost(this) {
+                @Override
+                protected String getJSMainModuleName() {
+                    return "index";
+                }
+
++                @Override
++                public boolean getUseDeveloperSupport() {
++                    return BuildConfig.DEBUG;
++                }
+
++                @Override
++                public List<ReactPackage> getPackages() {
++                    ArrayList<ReactPackage> packages = new PackageList(this).getPackages();
++                    return packages;
++                }
++            }
+-    }
+
++    @Override
++    public ReactNativeHost getReactNativeHost() {
++        return mReactNativeHost;
++    }
+
+-    @Override
+-    public boolean isDebug() {
+-        return BuildConfig.DEBUG;
+-    }
+
+-    @Nullable
+-    @Override
+-    public List<ReactPackage> createAdditionalReactPackages() {
+-        List<ReactPackage> packages = new ArrayList<>();
+-        return packages;
+-    }
+}
+```
+
+### Update settings.gradle
+Since RNN now supports auto linking, declaring the dependency manually is no longer needed.
+```diff
+-include ':react-native-navigation'
+-project(':react-native-navigation').projectDir = new File(rootProject.projectDir, '../../lib/android/app/')
+```
+
+### Make sure your app supports auto linking
+#### Update `app/build.gradle`
+Add these lines to the bottom of your `app/build.gradle` file.
+```diff
++apply from: file("../../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
++applyNativeModulesAppBuildGradle(project)
+```
+#### Update `settings.gradle`
+```diff
++apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
++applyNativeModulesSettingsGradle(settings)
+include ':app'
+```
+
+### Remove RNN pod from podspec
+As RNN is now autolinked, remove its pod from your podspec file. This will ensure the correct version is linked when running `pod install`
+```diff
+- pod 'ReactNativeNavigation', :podspec => '../node_modules/react-native-navigation/ReactNativeNavigation.podspec'
+```
+
+## Breaking Changes
+### Modal animation parity
+show and dismiss animation api have been fixed and are now in parity with Android api.
+If you've defined a custom modal animation, you can now consolidate the animation declarations.
+
+<table>
+<tr>
+  <td>New Android + iOS API</td>
+  <td>Unsupported iOS API</td>
+</tr>
+<tr>
+<td>
+
+  ```js
+  options: {
+    animations: {
+      showModal: {
+        alpha: {
+          from: 0,
+          to: 1,
+          duration: 250,
+        }
+      }
+    }
+  }
+  ```
+</td>
+<td>
+
+  ```js
+  options: {
+    animations: {
+      showModal: {
+        content: {
+          alpha: {
+            from: 0,
+            to: 1,
+            duration: 250
+          }
+        }
+      }
+    }
+  }
+  ```
+</td>
+</tr>
+</table>
+
+### drawBehind is deprecated on iOS
+> ❗️topBar and bottomTabs drawBehind option will be removed in the next major version.
+
+The drawBehind option has been an anti pattern on iOS from the start and was introduced only for parity with Android api.
+On iOS, when a ScrollView or a SafeAreaView are used as screen root; the system handles insets automatically.
+As adoption of notch devices increases, developers use these views regularly, rendering the drawBehind option useless.
+
+>**During the migration phase, leave Android options unchanged and set `drawBehind: true` to both TopBar and BottomTabs in default options.**
+
+### Android: Animation values are now declared in dp
+If you're animating `translationY` or `translationX` pass these values in dp instead of pixels.
+This is especially relevant to values returned by `await Navigation.constants()` api as these values are returned in dp. Now, if you'd like to use them in animations, you can do so without converting to pixels.
+
+# 4.8.1
+## Fixed
+### Android
+* Fix NPE when showing Overlay [#bfde34a](https://github.com/wix/react-native-navigation/commit/bfde34a5862c971587583aa52cb450cf526d5c66) by [guyca](https://github.com/guyca)
+### iOS
+* Fix overlays touch interception on new iPads [#433f48b](https://github.com/wix/react-native-navigation/commit/433f48b59d9be5aa328361654341afa8414c2e21) by [yogevbd](https://github.com/yogevbd)
+
+# 4.8.0
+## Fixed
+### Android
+* Support react-native-youtube [#ffbd288](https://github.com/wix/react-native-navigation/commit/ffbd2882b24109ff8f2b51ca3c8c88822cc9afb7) by [guyca](https://github.com/guyca)
+### iOS
+* Fix wrong SafeAreaView margins when using bottomTabs.drawBehind: true [#527fd49](https://github.com/wix/react-native-navigation/commit/527fd49f2f1517143032a8b14f6ab17d2f74c032) by [yogevbd](https://github.com/yogevbd)
+
+# 4.7.1
+## Fixed
+* Move selectTabOnPress prop to correct interface [#d6ead65](https://github.com/wix/react-native-navigation/commit/d6ead65c9331f12d3f79fc3b5bb7e0a0de80816e) by [phanghos](https://github.com/phanghos)
+### iOS
+* Fix external components layout measurement [#1961181](https://github.com/wix/react-native-navigation/commit/196118186fb788200dafcc1e11cd9f7d6e3f6dda) by [yogevbd](https://github.com/yogevbd)
+
+# 4.7.0
+## Added
+* On tab press event - handle tab selection in Js [#b153142](https://github.com/wix/react-native-navigation/commit/b1531428a0a9608b5d1c84547f228d5de0c1aca2) by [pontusab](https://github.com/pontusab)
+* RN 0.62 support on Android [#4bfa7c5](https://github.com/wix/react-native-navigation/commit/4bfa7c5092ac0ca6708b4bd61bd63e59601e8f3e) by [safaiyeh](https://github.com/safaiyeh)
+## Fixed
+### Android
+* Fix dotIndicator not respecting initial visibility option [#d9bd03f](https://github.com/wix/react-native-navigation/commit/d9bd03fea7465acadb6ef17613f8fe98e8be4eb1) by [itsam](https://github.com/itsam)
+### iOS
+* Set default fontsize value for title and subtitle [#0741799](https://github.com/wix/react-native-navigation/commit/0741799281a43380bc419886a19a8e72fc32d042) by [maryjenel](https://github.com/maryjenel)
+* Respect default options when updating bottomTab options [#513138e](https://github.com/wix/react-native-navigation/commit/513138ebd9c620ba9e8d2b8a4a154ced790de1b2) by [yogevbd](https://github.com/yogevbd)
+
+# 4.6.0
+## Added
+### Android
+* Adapt NavigationBar buttons color according to NavigationBar background color [#6521177](https://github.com/wix/react-native-navigation/commit/65211775f6b354945a9dc5a3f7791ddfdd20ebab) by [rverbytskyi](https://github.com/rverbytskyi)
+
+## Fixed
+### Android
+* Disable TopBar scroll when nestedScrollEnabled is enabled [#9a361a4](https://github.com/wix/react-native-navigation/commit/9a361a4fe340f5af18e1fa87b02f5e7e1f41646d) by [guyca](https://github.com/guyca)
+* Reject promise when trying to push two children with same id [#27ceea8](https://github.com/wix/react-native-navigation/commit/27ceea8fb92506fdd756e45768e7235e3e7babc6) by [guyca](https://github.com/guyca)
+* Fix drawBehind in default options not working [#0e93366](https://github.com/wix/react-native-navigation/commit/0e933661aed9cb4a6cad6e1e1fa5a352f371f754) by [guyca](https://github.com/guyca)
+
+### iOS
+* Fix merge options leaks to next screen in stack [#386bf65](https://github.com/wix/react-native-navigation/commit/386bf65d251f0c6582de2cf529487dfafc69bc9d) by [yogevbd](https://github.com/yogevbd)
+* Invoke all commands on the main thread [#8843224](https://github.com/wix/react-native-navigation/commit/8843224a9aed33a9fd92323db48ab80f50cae72f) by [yogevbd](https://github.com/yogevbd)
+* Resolve navigationItem from external component [#d81b0bf](https://github.com/wix/react-native-navigation/commit/d81b0bf3cf929136218a71dbc74dcbf0cc668886) by [yogevbd](https://github.com/yogevbd)
+* Fix popGesture freezes the app [#37473f8](https://github.com/wix/react-native-navigation/commit/37473f88e9bfdc847f25cd21e5ca521e31157268) by [yogevbd](https://github.com/yogevbd)
+
+# 4.5.4
+* Fix title.component fill parent [#7e6b2be](https://github.com/wix/react-native-navigation/commit/7e6b2be676382db74bd393940ddfdea3a3847e2c) by [yogevbd](https://github.com/yogevbd)
+
+# 4.5.2 - 4.5.3
+## Fixed
+### Android
+* Fix NPE when updating tabs before tab views are created [#fccfb4d](https://github.com/wix/react-native-navigation/commit/fccfb4d8c289c10b6424e38690fa4469fa65b7ea) by [guyca](https://github.com/guyca)
+
+# 4.5.1
+## Fixed
+### iOS
+* Fix crash when check UIBarButtonItem are not added by RNN [#233820e](https://github.com/wix/react-native-navigation/commit/233820ef372042d4fae463b0a63f75bfeab160da) by [wixiosalex](https://github.com/wixiosalex)
+
+# 4.5.0
+## Added
+* Improve accessibility support [#07c558c](https://github.com/wix/react-native-navigation/commit/07c558c76f7bf3acd56a2af4e0e901c81ae0e49d), [#f635b5e](https://github.com/wix/react-native-navigation/commit/f635b5e8be81ee99aaf2726c989624b1dafcbf41) by [yogevbd](https://github.com/yogevbd) and [guyca](https://github.com/guyca)
+### iOS
+* Add modalAttemptedToDismiss event [#87af42a](https://github.com/wix/react-native-navigation/commit/87af42a56be7deaa32678afb72846c92e293f524) by [manicantic](https://github.com/manicantic)
+* Add bottomTabLongPressed event on iOS [#c425f83](https://github.com/wix/react-native-navigation/commit/c425f837b1d99a8b27525d52b6eba37fb77cbded) by [N3TC4T](https://github.com/N3TC4T)
+## Fixed
+### Android
+* Emit modalDismissed event before ViewController is destroyed [#cf591d9](https://github.com/wix/react-native-navigation/commit/cf591d9a9c48ed89c7e7fed4594b8dbcb9732bc9) by [guyca](https://github.com/guyca)
+
 # 4.4.0
 ## Added
 ### Android

@@ -15,6 +15,7 @@ public class EventEmitter {
     private static final String AppLaunched = "RNN.AppLaunched";
     private static final String CommandCompleted = "RNN.CommandCompleted";
     private static final String BottomTabSelected = "RNN.BottomTabSelected";
+    private static final String BottomTabPressed = "RNN.BottomTabPressed";
     private static final String ComponentDidAppear = "RNN.ComponentDidAppear";
     private static final String ComponentDidDisappear = "RNN.ComponentDidDisappear";
     private static final String NavigationButtonPressed = "RNN.NavigationButtonPressed";
@@ -61,6 +62,12 @@ public class EventEmitter {
         emit(BottomTabSelected, event);
     }
 
+    public void emitBottomTabPressed(int tabIndex) {
+        WritableMap event = Arguments.createMap();
+        event.putInt("tabIndex", tabIndex);
+        emit(BottomTabPressed, event);
+    }
+
     public void emitCommandCompleted(String commandName, String commandId, long completionTime) {
         WritableMap event = Arguments.createMap();
         event.putString("commandName", commandName);
@@ -69,9 +76,10 @@ public class EventEmitter {
         emit(CommandCompleted, event);
     }
 
-    public void emitModalDismissed(String id, int modalsDismissed) {
+    public void emitModalDismissed(String id, String componentName, int modalsDismissed) {
         WritableMap event = Arguments.createMap();
         event.putString("componentId", id);
+        event.putString("componentName", componentName);
         event.putInt("modalsDismissed", modalsDismissed);
         emit(ModalDismissed, event);
     }

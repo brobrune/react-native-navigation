@@ -1,9 +1,15 @@
 #import "RNNBottomTabsController.h"
 #import "UITabBarController+RNNUtils.h"
 
+@interface RNNBottomTabsController ()
+@property (nonatomic, strong) BottomTabPresenter* bottomTabPresenter;
+@property (nonatomic, strong) RNNDotIndicatorPresenter* dotIndicatorPresenter;
+@end
+
 @implementation RNNBottomTabsController {
   NSUInteger _currentTabIndex;
     BottomTabsBaseAttacher* _bottomTabsAttacher;
+    
 }
 
 - (instancetype)initWithLayoutInfo:(RNNLayoutInfo *)layoutInfo
@@ -11,12 +17,30 @@
                            options:(RNNNavigationOptions *)options
                     defaultOptions:(RNNNavigationOptions *)defaultOptions
                          presenter:(RNNBasePresenter *)presenter
+                bottomTabPresenter:(BottomTabPresenter *)bottomTabPresenter
+             dotIndicatorPresenter:(RNNDotIndicatorPresenter *)dotIndicatorPresenter
                       eventEmitter:(RNNEventEmitter *)eventEmitter
               childViewControllers:(NSArray *)childViewControllers
                 bottomTabsAttacher:(BottomTabsBaseAttacher *)bottomTabsAttacher {
-    self = [super initWithLayoutInfo:layoutInfo creator:creator options:options defaultOptions:defaultOptions presenter:presenter eventEmitter:eventEmitter childViewControllers:childViewControllers];
     _bottomTabsAttacher = bottomTabsAttacher;
+    _bottomTabPresenter = bottomTabPresenter;
+    _dotIndicatorPresenter = dotIndicatorPresenter;
+    self = [super initWithLayoutInfo:layoutInfo creator:creator options:options defaultOptions:defaultOptions presenter:presenter eventEmitter:eventEmitter childViewControllers:childViewControllers];
+    if (@available(iOS 13.0, *)) {
+        self.tabBar.standardAppearance = [UITabBarAppearance new];
+    }
     return self;
+}
+
+- (void)onChildAddToParent:(UIViewController *)child options:(RNNNavigationOptions *)options {
+    [_bottomTabPresenter applyOptionsOnWillMoveToParentViewController:options child:child];
+}
+
+- (void)mergeChildOptions:(RNNNavigationOptions *)options child:(UIViewController *)child {
+    [super mergeChildOptions:options child:child];
+    UIViewController* childViewController = [self findViewController:child];
+    [_bottomTabPresenter mergeOptions:options resolvedOptions:childViewController.resolveOptions child:childViewController];
+    [_dotIndicatorPresenter mergeOptions:options resolvedOptions:childViewController.resolveOptions child:childViewController];
 }
 
 - (id<UITabBarControllerDelegate>)delegate {
@@ -44,6 +68,15 @@
     //     }
     //     index++;
     // }
+    
+    // for (UIView *view in [[self tabBar] subviews]) {
+    //      UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget: self action: @selector(handleLongPress:)];
+    //       if ([NSStringFromClass([view class]) isEqualToString:@"UITabBarButton"]) {
+    //           [view addGestureRecognizer: longPressGesture];
+    //       }
+    // }
+    
+    [_dotIndicatorPresenter bottomTabsDidLayoutSubviews:self];
 }
 
 - (UIViewController *)getCurrentChild {
@@ -90,10 +123,6 @@
   [super setSelectedIndex:selectedIndex];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle {
-  return [[self presenter] getStatusBarStyle:self.resolveOptions];
-}
-
 #pragma mark UITabBarControllerDelegate
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
@@ -118,5 +147,40 @@
         [self.eventEmitter sendBottomTabLongPressed:@(_index)];
     }
 }
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
+{
+    NSUInteger _index = [tabBarController.viewControllers indexOfObject:viewController];
+    [self.eventEmitter sendBottomTabPressed:@(_index)];
+    
+    if([[viewController resolveOptions].bottomTab.selectTabOnPress getWithDefaultValue:YES]){
+        return YES;
+    }
+
+    return NO;
+}
+
+# pragma mark - UIViewController overrides
+
+- (void)willMoveToParentViewController:(UIViewController *)parent {
+    [self.presenter willMoveToParentViewController:parent];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return [self.presenter getStatusBarStyle];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return [self.presenter getStatusBarVisibility];
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return [self.presenter getOrientation];
+}
+
+- (BOOL)hidesBottomBarWhenPushed {
+    return [self.presenter hidesBottomBarWhenPushed];
+}
+
 
 @end

@@ -7,11 +7,13 @@
 
 - (void)applyOptionsBeforePopping:(RNNTopBarOptions *)options;
 
-- (void)mergeOptions:(RNNTopBarOptions *)options defaultOptions:(RNNTopBarOptions *)defaultOptions;
+- (void)mergeOptions:(RNNTopBarOptions *)options withDefault:(RNNTopBarOptions *)defaultOptions;
 
 - (instancetype)initWithNavigationController:(UINavigationController *)boundNavigationController;
 
 - (BOOL)transparent;
+
+- (void)setBackButtonOptions:(RNNBackButtonOptions *)backButtonOptions;
 
 @property (nonatomic) BOOL translucent;
 @property (nonatomic, strong) UIColor* backgroundColor;

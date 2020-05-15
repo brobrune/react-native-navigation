@@ -23,9 +23,7 @@ import com.reactnativenavigation.viewcontrollers.navigator.Navigator;
 
 import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
 
-@SuppressWarnings("FieldCanBeLocal")
 public class Presenter {
-
     private Activity activity;
     private Options defaultOptions;
 
@@ -87,10 +85,11 @@ public class Presenter {
     }
 
     private void applyStatusBarOptions(Options options) {
-        setStatusBarBackgroundColor(options.statusBar);
-        setTextColorScheme(options.statusBar.textColorScheme);
-        setTranslucent(options.statusBar);
-        setStatusBarVisible(options.statusBar.visible);
+        StatusBarOptions statusBar = options.copy().withDefaultOptions(defaultOptions).statusBar;
+        setStatusBarBackgroundColor(statusBar);
+        setTextColorScheme(statusBar.textColorScheme);
+        setTranslucent(statusBar);
+        setStatusBarVisible(statusBar.visible);
     }
 
     private void setTranslucent(StatusBarOptions options) {
@@ -181,6 +180,7 @@ public class Presenter {
             } else {
                 flags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN;
             }
+            if (flags != view.getSystemUiVisibility()) view.requestLayout();
             view.setSystemUiVisibility(flags);
         } else if (drawBehind.hasValue()) {
             if (drawBehind.isTrue()) {
@@ -192,17 +192,56 @@ public class Presenter {
     }
 
     private void applyNavigationBarOptions(NavigationBarOptions options) {
+        applyNavigationBarVisibility(options);
         setNavigationBarBackgroundColor(options);
     }
 
     private void mergeNavigationBarOptions(NavigationBarOptions options) {
+        mergeNavigationBarVisibility(options);
         setNavigationBarBackgroundColor(options);
+    }
+
+    private void mergeNavigationBarVisibility(NavigationBarOptions options) {
+        if (options.isVisible.hasValue()) applyNavigationBarOptions(options);
+    }
+
+    private void applyNavigationBarVisibility(NavigationBarOptions options) {
+        View decorView = activity.getWindow().getDecorView();
+        int flags = decorView.getSystemUiVisibility();
+        boolean defaultVisibility = (flags & View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) == 0;
+        int hideNavigationBarFlags = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        if (options.isVisible.get(defaultVisibility)) {
+            flags &= ~hideNavigationBarFlags;
+        } else {
+            flags |= hideNavigationBarFlags;
+        }
+        decorView.setSystemUiVisibility(flags);
     }
 
     private void setNavigationBarBackgroundColor(NavigationBarOptions navigationBar) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && navigationBar.backgroundColor.canApplyValue()) {
             int defaultColor = activity.getWindow().getNavigationBarColor();
-            activity.getWindow().setNavigationBarColor(navigationBar.backgroundColor.get(defaultColor));
+            int color = navigationBar.backgroundColor.get(defaultColor);
+            activity.getWindow().setNavigationBarColor(color);
+            setNavigationBarButtonsColor(color);
         }
+    }
+
+    private void setNavigationBarButtonsColor(int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            View decorView = activity.getWindow().getDecorView();
+            int flags = decorView.getSystemUiVisibility();
+            if (isColorLight(color)) {
+                flags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            } else {
+                flags &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            }
+            decorView.setSystemUiVisibility(flags);
+        }
+    }
+
+    private boolean isColorLight(int color) {
+        double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
+        return darkness < 0.5;
     }
 }

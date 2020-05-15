@@ -41,6 +41,11 @@ public class ComponentViewController extends ChildController<ComponentLayout> {
     }
 
     @Override
+    public String getCurrentComponentName() {
+        return this.componentName;
+    }
+
+    @Override
     public void setDefaultOptions(Options defaultOptions) {
         super.setDefaultOptions(defaultOptions);
         presenter.setDefaultOptions(defaultOptions);
@@ -84,14 +89,14 @@ public class ComponentViewController extends ChildController<ComponentLayout> {
     @NonNull
     @Override
     protected ComponentLayout createView() {
-        view = (ComponentLayout) viewCreator.create(getActivity(), getId(), componentName);
+        ComponentLayout view = (ComponentLayout) viewCreator.create(getActivity(), getId(), componentName);
         return (ComponentLayout) view.asView();
     }
 
     @Override
     public void mergeOptions(Options options) {
         if (options == Options.EMPTY) return;
-        presenter.mergeOptions(getView(), options);
+        if (isViewShown()) presenter.mergeOptions(getView(), options);
         super.mergeOptions(options);
     }
 

@@ -100,7 +100,7 @@ public class ModalPresenterTest extends BaseTest {
     public void showModal_resolvesDefaultOptions() throws JSONException {
         Options defaultOptions = new Options();
         JSONObject disabledShowModalAnimation = new JSONObject().put("enabled", false);
-        defaultOptions.animations.showModal = AnimationOptions.parse(disabledShowModalAnimation);
+        defaultOptions.animations.showModal = new AnimationOptions(disabledShowModalAnimation);
 
         uut.setDefaultOptions(defaultOptions);
         uut.showModal(modal1, root, new CommandListenerAdapter());
@@ -256,5 +256,21 @@ public class ModalPresenterTest extends BaseTest {
         uut.dismissModal(modal, root, root, listener);
         inOrder.verify(listener).onSuccess(modal.getId());
         inOrder.verify(modal).destroy();
+    }
+
+    @Test
+    public void dismissModal_modalsLayoutIfHiddenIsAllModalsAreDismissed() {
+        disableShowModalAnimation(modal1, modal2);
+        disableDismissModalAnimation(modal1, modal2);
+
+        uut.showModal(modal1, root, new CommandListenerAdapter());
+        assertVisible(modalsLayout);
+        uut.showModal(modal2, modal1, new CommandListenerAdapter());
+        assertVisible(modalsLayout);
+
+        uut.dismissModal(modal2, modal1, root, new CommandListenerAdapter());
+        assertVisible(modalsLayout);
+        uut.dismissModal(modal1, root, root, new CommandListenerAdapter());
+        assertGone(modalsLayout);
     }
 }

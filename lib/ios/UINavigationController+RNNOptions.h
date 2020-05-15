@@ -2,8 +2,6 @@
 
 @interface UINavigationController (RNNOptions)
 
-- (void)setInteractivePopGestureEnabled:(BOOL)enabled;
-
 - (void)setRootBackgroundImage:(UIImage *)backgroundImage;
 
 - (void)setNavigationBarTestId:(NSString *)testID;
@@ -17,9 +15,5 @@
 - (void)setNavigationBarBlur:(BOOL)blur;
 
 - (void)setNavigationBarClipsToBounds:(BOOL)clipsToBounds;
-
-- (void)setNavigationBarLargeTitleVisible:(BOOL)visible;
-
-- (void)setBackButtonColor:(UIColor *)color;
 
 @end

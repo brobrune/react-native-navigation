@@ -24,11 +24,13 @@
 
 - (void)sendOnPreviewCompleted:(NSString *)componentId previewComponentId:(NSString *)previewComponentId;
 
-- (void)sendModalsDismissedEvent:(NSString *)componentId numberOfModalsDismissed:(NSNumber *)modalsDismissed;
+- (void)sendModalsDismissedEvent:(NSString *)componentId componentName:(NSString *)componentName numberOfModalsDismissed:(NSNumber *)modalsDismissed;
 
 - (void)sendModalAttemptedToDismissEvent:(NSString *)componentId;
 
 - (void)sendScreenPoppedEvent:(NSString *)componentId;
+
+- (void)sendBottomTabPressed:(NSNumber *)tabIndex;
 
 
 @end
