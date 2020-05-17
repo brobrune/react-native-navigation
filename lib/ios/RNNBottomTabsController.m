@@ -1,6 +1,8 @@
 #import "RNNBottomTabsController.h"
 #import "UITabBarController+RNNUtils.h"
 
+#define TAB_BAR_HEIGHT 66;
+
 @interface RNNBottomTabsController ()
 @property (nonatomic, strong) BottomTabPresenter* bottomTabPresenter;
 @property (nonatomic, strong) RNNDotIndicatorPresenter* dotIndicatorPresenter;
@@ -77,6 +79,27 @@
     // }
     
     [_dotIndicatorPresenter bottomTabsDidLayoutSubviews:self];
+    CGRect tabFrame = self.tabBar.frame;
+
+    // Add shadow of specific color
+    CALayer *topBorder = [CALayer layer];
+    UIColor * borderColor = [UIColor colorWithRed:242.0f/255.0f green:242.0f/255.0f blue:242.0f/255.0f alpha:1.0f];
+    topBorder.frame = CGRectMake(0.0f, 0.0f, self.view.frame.size.width, 1);
+    topBorder.backgroundColor = [borderColor CGColor];
+    [self.tabBar.layer addSublayer:topBorder];
+    
+    // Increase Tab Bar Height
+    // For some reason sizeToFit don't work anymore =`(
+    CGFloat height = TAB_BAR_HEIGHT;
+    if (@available(iOS 11.0, *)) {
+      UIWindow *window = UIApplication.sharedApplication.keyWindow;
+      CGFloat bottomPadding = window.safeAreaInsets.bottom;
+      height += bottomPadding;
+    }
+
+    tabFrame.size.height = height;
+    tabFrame.origin.y = self.view.frame.size.height - height;
+    self.tabBar.frame = tabFrame;
 }
 
 - (UIViewController *)getCurrentChild {
