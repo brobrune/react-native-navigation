@@ -22,6 +22,13 @@
     [self applyBackgroundColor:[withDefault.bottomTabs.backgroundColor getWithDefaultValue:nil] translucent:[withDefault.bottomTabs.translucent getWithDefaultValue:NO]];
     [bottomTabs setTabBarHideShadow:[withDefault.bottomTabs.hideShadow getWithDefaultValue:NO]];
     [bottomTabs setTabBarStyle:[RCTConvert UIBarStyle:[withDefault.bottomTabs.barStyle getWithDefaultValue:@"default"]]];
+    if (withDefault.bottomTabs.visible.hasValue) {
+        if (withDefault.bottomTabs.animate.hasValue) {
+            [bottomTabs setTabBarVisible:withDefault.bottomTabs.visible.get animated:[withDefault.bottomTabs.animate getWithDefaultValue:NO]];
+        } else {
+            [bottomTabs setTabBarVisible:options.bottomTabs.visible.get animated:NO];
+        }
+    }
 }
 
 - (void)mergeOptions:(RNNNavigationOptions *)options resolvedOptions:(RNNNavigationOptions *)currentOptions {

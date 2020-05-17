@@ -36,7 +36,14 @@
 		tabItem.imageInsets = UIEdgeInsetsMake(top, left, bottom, right);
 	}
 	
-  tabItem.titlePositionAdjustment = UIOffsetMake(0.0, -10.0);
+  if (@available(iOS 13.0, *)) {
+    UITabBarAppearance* appearance =  tabItem.standardAppearance.copy;
+    appearance.stackedLayoutAppearance.normal.titlePositionAdjustment = UIOffsetMake(0, -10);
+    tabItem.standardAppearance = appearance;
+  } else {
+    tabItem.titlePositionAdjustment = UIOffsetMake(0.0, -10.0);
+  }
+
 	[self appendTitleAttributes:tabItem bottomTabOptions:bottomTabOptions];
 	
 	return tabItem;
